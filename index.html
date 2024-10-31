@@ -21,9 +21,11 @@
         .control-group label {
             width: 100px;
         }
-        select {
+        input[type="color"],
+        input[list] {
             padding: 5px;
             width: 150px;
+            height: 40px;
         }
         .svg-container {
             position: relative;
@@ -41,36 +43,32 @@
     </style>
 </head>
 <body>
+    <!-- Color Options Datalist -->
+    <datalist id="color-options">
+        <option value="#ffffff">MTN 94 - R 9010 White</option>
+        <option value="#000000">MTN 94 - R 9011 Black</option>
+        <option value="#402009">MTN 94 - RV 100 Coffee Brown</option>
+        <option value="#2f1109">MTN 94 - RV 101 Ebony Brown</option>
+        <option value="#f3ef36">MTN 94 - RV 1013 Bone White</option>
+        <option value="#ede672">MTN 94 - RV 1016 Lemon Yellow</option>
+        <option value="#ffac73">MTN 94 - RV 1017 Peach</option>
+        <option value="#ffdda3">MTN 94 - RV 102 Dark Orange</option>
+        <option value="#ffe100">MTN 94 - RV 1021 Light Yellow</option>
+        <option value="#ffd58b">MTN 94 - RV 1028 Medium Yellow</option>
+    </datalist>
+
     <div class="controls">
         <div class="control-group">
             <label>Background:</label>
-            <select id="background-color">
-                <option value="#FFFFFF">White</option>
-                <option value="#000000">Black</option>
-                <option value="#ff2741">Red</option>
-                <option value="#0088cd">Blue</option>
-                <option value="#2fc700">Green</option>
-            </select>
+            <input type="color" id="background-color" list="color-options">
         </div>
         <div class="control-group">
             <label>Outline:</label>
-            <select id="outline-color">
-                <option value="#000000">Black</option>
-                <option value="#FFFFFF">White</option>
-                <option value="#ff2741">Red</option>
-                <option value="#0088cd">Blue</option>
-                <option value="#2fc700">Green</option>
-            </select>
+            <input type="color" id="outline-color" list="color-options">
         </div>
         <div class="control-group">
             <label>Fill:</label>
-            <select id="fill-color">
-                <option value="#ff2741">Red</option>
-                <option value="#000000">Black</option>
-                <option value="#FFFFFF">White</option>
-                <option value="#0088cd">Blue</option>
-                <option value="#2fc700">Green</option>
-            </select>
+            <input type="color" id="fill-color" list="color-options">
         </div>
     </div>
 
