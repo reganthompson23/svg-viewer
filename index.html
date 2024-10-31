@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Layer Viewer</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .controls {
+            margin-bottom: 20px;
+        }
+        .control-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .control-group label {
+            width: 100px;
+        }
+        select {
+            padding: 5px;
+            width: 150px;
+        }
+        .svg-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 1199.5/475.9;
+        }
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="control-group">
+            <label>Background:</label>
+            <select id="background-color">
+                <option value="#FFFFFF">White</option>
+                <option value="#000000">Black</option>
+                <option value="#ff2741">Red</option>
+                <option value="#0088cd">Blue</option>
+                <option value="#2fc700">Green</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>Outline:</label>
+            <select id="outline-color">
+                <option value="#000000">Black</option>
+                <option value="#FFFFFF">White</option>
+                <option value="#ff2741">Red</option>
+                <option value="#0088cd">Blue</option>
+                <option value="#2fc700">Green</option>
+            </select>
+        </div>
+        <div class="control-group">
+            <label>Fill:</label>
+            <select id="fill-color">
+                <option value="#ff2741">Red</option>
+                <option value="#000000">Black</option>
+                <option value="#FFFFFF">White</option>
+                <option value="#0088cd">Blue</option>
+                <option value="#2fc700">Green</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="svg-container" id="svg-container">
+        <!-- Outline SVG -->
+        <svg viewBox="0 0 1199.5 475.9" id="outline-svg">
+            <path d="M488.6,113.5c-0.3,0.3-0.6,0.5-0.8,0.8c-2.1,2.8-4.8,4.9-7.9,6.4c-7.9,3.8-15.9,7.6-23.7,11.7c-5.5,2.9-10.8,6.2-16.1,9.4 c-17.9,11-35.9,22-54.7,31.3c-5.9,2.9-4.6,1.3-6.8,7.7c-1.1,3.2-2.5,6.3-4,9.2c-3,5.8-4.3,12.2-5.9,18.4c-0.4,1.4,0,1.8,1.4,2.4 c2.2,0.9,4.4,0.8,6.6,0.4c14.8-2.4,29.3-6,43.8-9.5c10.6-2.6,21.1-5.2,31.6-7.8c2.4-0.6,4.8-1,7.3-0.3c3.2,1,5.4,2.9,6,6.2 c0.7,3.5,0.2,6.8-2.8,9.1c-1.5,1.1-3.3,2-5.1,2.6c-3.5,1.2-7,2.3-10.6,3.2c-7.4,1.8-14.2,4.9-21,8.1c-8.4,4-16.6,8.2-25,12.2 c-8.1,4-16.5,7-25.2,9.2c-2.9,0.7-5.7,2.1-8.5,3.1c-3.9,1.4-8,2.2-12.2,2.2c-3.5,0-6.6-1-9.6-2.6c-0.3-0.2-0.7-0.4-1-0.6"/>
+        </svg>
+
+        <!-- Fill SVG -->
+        <svg viewBox="0 0 1199.5 475.9" id="fill-svg">
+            <path d="M302.7,292.6c-0.3,0.3-0.6,0.5-0.8,0.8c-2.1,2.8-4.8,4.9-7.9,6.4c-7.9,3.8-15.9,7.6-23.7,11.7c-5.5,2.9-10.8,6.2-16.1,9.4 c-17.9,11-35.9,22-54.7,31.3c-5.9,2.9-4.6,1.3-6.8,7.7c-1.1,3.2-2.5,6.3-4,9.2c-3,5.8-4.3,12.2-5.9,18.4c-0.4,1.4,0,1.8,1.4,2.4 c2.2,0.9,4.4,0.8,6.6,0.4c14.8-2.4,29.3-6,43.8-9.5c10.6-2.6,21.1-5.2,31.6-7.8c2.4-0.6,4.8-1,7.3-0.3c3.2,1,5.4,2.9,6,6.2 c0.7,3.5,0.2,6.8-2.8,9.1c-1.5,1.1-3.3,2-5.1,2.6c-3.5,1.2-7,2.3-10.6,3.2c-7.4,1.8-14.2,4.9-21,8.1c-8.4,4-16.6,8.2-25,12.2 c-8.1,4-16.5,7-25.2,9.2c-2.9,0.7-5.7,2.1-8.5,3.1c-3.9,1.4-8,2.2-12.2,2.2c-3.5,0-6.6-1-9.6-2.6c-0.3-0.2-0.7-0.4-1-0.6"/>
+        </svg>
+    </div>
+
+    <script>
+        // Get elements
+        const container = document.getElementById('svg-container');
+        const outlineSvg = document.getElementById('outline-svg');
+        const fillSvg = document.getElementById('fill-svg');
+
+        // Add event listeners to color selectors
+        document.getElementById('background-color').addEventListener('change', (e) => {
+            container.style.backgroundColor = e.target.value;
+        });
+
+        document.getElementById('outline-color').addEventListener('change', (e) => {
+            const paths = outlineSvg.getElementsByTagName('path');
+            for(let path of paths) {
+                path.style.fill = e.target.value;
+            }
+        });
+
+        document.getElementById('fill-color').addEventListener('change', (e) => {
+            const paths = fillSvg.getElementsByTagName('path');
+            for(let path of paths) {
+                path.style.fill = e.target.value;
+            }
+        });
+
+        // Set initial colors
+        container.style.backgroundColor = document.getElementById('background-color').value;
+        const outlinePaths = outlineSvg.getElementsByTagName('path');
+        for(let path of outlinePaths) {
+            path.style.fill = document.getElementById('outline-color').value;
+        }
+        const fillPaths = fillSvg.getElementsByTagName('path');
+        for(let path of fillPaths) {
+            path.style.fill = document.getElementById('fill-color').value;
+        }
+    </script>
+</body>
+</html>
