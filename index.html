@@ -5,110 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG Layer Viewer</title>
     <style>
-    /* Base styles */
-    body {
-        margin: 0;
-        padding: 20px;
-        font-family: system-ui, -apple-system, sans-serif;
-    }
+        /* Base styles */
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
 
-    /* Control section styles */
-    .controls {
-        margin-bottom: 20px;
-    }
+        /* Controls section */
+        .controls {
+            margin-bottom: 20px;
+        }
 
-    .control-group {
-        margin: 10px 0;
-        display: flex;
-        align-items: center;
-    }
+        .control-group {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
 
-    .control-group label {
-        width: 100px;
-    }
+        .control-group label {
+            width: 100px;
+        }
 
-    /* Select styles */
-    select {
-        padding: 5px;
-        width: 250px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        background-color: white;
-    }
+        /* Custom select styling */
+        .custom-select {
+            position: relative;
+            width: 250px;
+        }
 
-    select option {
-        padding: 8px 8px 8px 35px;
-        position: relative;
-        background-repeat: no-repeat;
-        background-position: 8px center;
-        background-size: 20px 20px;
-    }
+        .select-button {
+            width: 100%;
+            padding: 8px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 14px;
+        }
 
-    /* Color swatch styles */
-    .color-option {
-        display: flex;
-        align-items: center;
-        padding: 5px;
-    }
+        .color-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            display: inline-block;
+        }
 
-    .color-swatch {
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 1px solid #ccc;
-        margin-right: 10px;
-        display: inline-block;
-        vertical-align: middle;
-    }
+        .select-button .arrow {
+            margin-left: auto;
+            transition: transform 0.2s;
+        }
 
-    /* SVG container styles */
-    .svg-container {
-        position: relative;
-        width: 100%;
-        max-width: 1200px;
-        aspect-ratio: 1199.5/475.9;
-    }
+        /* Dropdown menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+        }
 
-    svg {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-</style>
+        .dropdown-menu.active {
+            display: block;
+        }
+
+        .dropdown-option {
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .dropdown-option:hover {
+            background: #f5f5f5;
+        }
+
+        /* SVG container styles */
+        .svg-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            aspect-ratio: 1199.5/475.9;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
 </head>
 <body>
     <div class="controls">
         <div class="control-group">
             <label>Background:</label>
-            <select id="background-color">
-                <option value="#ffffff">
-                    <div class="color-option">
-                        <span class="color-swatch" style="background: #ffffff;"></span>
-                        MTN 94 - R 9010 White
-                    </div>
-                </option>
-                <option value="#000000">
-                    <div class="color-option">
-                        <span class="color-swatch" style="background: #000000;"></span>
-                        MTN 94 - R 9011 Black
-                    </div>
-                </option>
-                <!-- Add all other colors following the same pattern -->
-            </select>
+            <div class="custom-select" id="background-select"></div>
         </div>
         <div class="control-group">
             <label>Outline:</label>
-            <select id="outline-color">
-                <!-- Same options as above -->
-            </select>
+            <div class="custom-select" id="outline-select"></div>
         </div>
         <div class="control-group">
             <label>Fill:</label>
-            <select id="fill-color">
-                <!-- Same options as above -->
-            </select>
+            <div class="custom-select" id="fill-select"></div>
         </div>
     </div>
 
@@ -125,89 +138,140 @@
     </div>
 
     <script>
-   // Color definitions
-   const colors = [
-       { value: '#ffffff', name: 'MTN 94 - R 9010 White' },
-       { value: '#000000', name: 'MTN 94 - R 9011 Black' },
-       { value: '#402009', name: 'MTN 94 - RV 100 Coffee Brown' },
-       { value: '#2f1109', name: 'MTN 94 - RV 101 Ebony Brown' },
-       { value: '#f3ef36', name: 'MTN 94 - RV 1013 Bone White' },
-       { value: '#ede672', name: 'MTN 94 - RV 1016 Lemon Yellow' },
-       { value: '#ffac73', name: 'MTN 94 - RV 1017 Peach' },
-       { value: '#ffdda3', name: 'MTN 94 - RV 102 Dark Orange' },
-       { value: '#ffe100', name: 'MTN 94 - RV 1021 Light Yellow' },
-       { value: '#ffd58b', name: 'MTN 94 - RV 1028 Medium Yellow' }
-   ];
+        // Color definitions
+        const colors = [
+            { value: '#ffffff', name: 'MTN 94 - R 9010 White' },
+            { value: '#000000', name: 'MTN 94 - R 9011 Black' },
+            { value: '#402009', name: 'MTN 94 - RV 100 Coffee Brown' },
+            { value: '#2f1109', name: 'MTN 94 - RV 101 Ebony Brown' },
+            { value: '#f3ef36', name: 'MTN 94 - RV 1013 Bone White' },
+            { value: '#ede672', name: 'MTN 94 - RV 1016 Lemon Yellow' },
+            { value: '#ffac73', name: 'MTN 94 - RV 1017 Peach' },
+            { value: '#ffdda3', name: 'MTN 94 - RV 102 Dark Orange' },
+            { value: '#ffe100', name: 'MTN 94 - RV 1021 Light Yellow' },
+            { value: '#ffd58b', name: 'MTN 94 - RV 1028 Medium Yellow' }
+        ];
 
-   // Function to create color options with swatches
-   function createColorOptions() {
-       const selects = ['background-color', 'outline-color', 'fill-color'];
-       
-       selects.forEach(selectId => {
-           const select = document.getElementById(selectId);
-           select.innerHTML = '';  // Clear existing options
-           
-           colors.forEach(color => {
-               const option = document.createElement('option');
-               const colorSwatch = document.createElement('span');
-               const wrapper = document.createElement('div');
-               
-               // Set up the color swatch
-               colorSwatch.className = 'color-swatch';
-               colorSwatch.style.backgroundColor = color.value;
-               
-               // Set up the wrapper
-               wrapper.className = 'color-option';
-               wrapper.appendChild(colorSwatch);
-               wrapper.appendChild(document.createTextNode(color.name));
-               
-               // Set up the option
-               option.value = color.value;
-               option.textContent = color.name;
-               option.dataset.color = color.value;
-               
-               select.appendChild(option);
-           });
-       });
-   }
+        class CustomSelect {
+            constructor(elementId, onChange) {
+                this.element = document.getElementById(elementId);
+                this.onChange = onChange;
+                this.value = colors[0].value;
+                this.createSelect();
+                this.addEventListeners();
+            }
 
-   // Initialize elements
-   const container = document.getElementById('svg-container');
-   const outlineSvg = document.getElementById('outline-svg');
-   const fillSvg = document.getElementById('fill-svg');
+            createSelect() {
+                // Create button
+                this.button = document.createElement('button');
+                this.button.className = 'select-button';
+                
+                // Create swatch
+                this.swatch = document.createElement('span');
+                this.swatch.className = 'color-swatch';
+                
+                // Create text
+                this.text = document.createElement('span');
+                this.text.textContent = colors[0].name;
+                
+                // Create arrow
+                this.arrow = document.createElement('span');
+                this.arrow.className = 'arrow';
+                this.arrow.textContent = '▼';
 
-   // Create color options
-   createColorOptions();
+                // Assemble button
+                this.button.appendChild(this.swatch);
+                this.button.appendChild(this.text);
+                this.button.appendChild(this.arrow);
 
-   // Event listeners for color changes
-   document.getElementById('background-color').addEventListener('change', (e) => {
-       container.style.backgroundColor = e.target.value;
-   });
+                // Create dropdown
+                this.dropdown = document.createElement('div');
+                this.dropdown.className = 'dropdown-menu';
 
-   document.getElementById('outline-color').addEventListener('change', (e) => {
-       const paths = outlineSvg.getElementsByTagName('path');
-       Array.from(paths).forEach(path => {
-           path.style.fill = e.target.value;
-       });
-   });
+                // Add options to dropdown
+                colors.forEach(color => {
+                    const option = document.createElement('div');
+                    option.className = 'dropdown-option';
+                    
+                    const optionSwatch = document.createElement('span');
+                    optionSwatch.className = 'color-swatch';
+                    optionSwatch.style.backgroundColor = color.value;
+                    
+                    option.appendChild(optionSwatch);
+                    option.appendChild(document.createTextNode(color.name));
+                    
+                    option.addEventListener('click', () => this.selectOption(color));
+                    this.dropdown.appendChild(option);
+                });
 
-   document.getElementById('fill-color').addEventListener('change', (e) => {
-       const paths = fillSvg.getElementsByTagName('path');
-       Array.from(paths).forEach(path => {
-           path.style.fill = e.target.value;
-       });
-   });
+                // Add to DOM
+                this.element.appendChild(this.button);
+                this.element.appendChild(this.dropdown);
 
-   // Set initial colors
-   container.style.backgroundColor = document.getElementById('background-color').value;
-   
-   Array.from(outlineSvg.getElementsByTagName('path')).forEach(path => {
-       path.style.fill = document.getElementById('outline-color').value;
-   });
-   
-   Array.from(fillSvg.getElementsByTagName('path')).forEach(path => {
-       path.style.fill = document.getElementById('fill-color').value;
-   });
-</script>
+                // Set initial color
+                this.swatch.style.backgroundColor = colors[0].value;
+            }
+
+            addEventListeners() {
+                this.button.addEventListener('click', () => {
+                    this.dropdown.classList.toggle('active');
+                    this.arrow.style.transform = this.dropdown.classList.contains('active') 
+                        ? 'rotate(180deg)' 
+                        : '';
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!this.element.contains(e.target)) {
+                        this.dropdown.classList.remove('active');
+                        this.arrow.style.transform = '';
+                    }
+                });
+            }
+
+            selectOption(color) {
+                this.value = color.value;
+                this.swatch.style.backgroundColor = color.value;
+                this.text.textContent = color.name;
+                this.dropdown.classList.remove('active');
+                this.arrow.style.transform = '';
+                if (this.onChange) {
+                    this.onChange(color.value);
+                }
+            }
+        }
+
+        // Initialize selects
+        const backgroundSelect = new CustomSelect('background-select', (value) => {
+            document.getElementById('svg-container').style.backgroundColor = value;
+        });
+
+        const outlineSelect = new CustomSelect('outline-select', (value) => {
+            const paths = document.getElementById('outline-svg').getElementsByTagName('path');
+            Array.from(paths).forEach(path => {
+                path.style.fill = value;
+            });
+        });
+
+        const fillSelect = new CustomSelect('fill-select', (value) => {
+            const paths = document.getElementById('fill-svg').getElementsByTagName('path');
+            Array.from(paths).forEach(path => {
+                path.style.fill = value;
+            });
+        });
+
+        // Set initial colors
+        document.getElementById('svg-container').style.backgroundColor = backgroundSelect.value;
+        
+        const outlinePaths = document.getElementById('outline-svg').getElementsByTagName('path');
+        Array.from(outlinePaths).forEach(path => {
+            path.style.fill = outlineSelect.value;
+        });
+        
+        const fillPaths = document.getElementById('fill-svg').getElementsByTagName('path');
+        Array.from(fillPaths).forEach(path => {
+            path.style.fill = fillSelect.value;
+        });
+    </script>
 </body>
 </html>
