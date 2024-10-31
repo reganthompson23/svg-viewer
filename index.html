@@ -21,11 +21,22 @@
         .control-group label {
             width: 100px;
         }
-        input[type="color"],
-        input[list] {
+        select {
             padding: 5px;
-            width: 150px;
-            height: 40px;
+            width: 250px; /* Made wider to accommodate color names */
+        }
+        /* Style for color swatches in dropdown */
+        .color-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
         }
         .svg-container {
             position: relative;
@@ -43,32 +54,36 @@
     </style>
 </head>
 <body>
-    <!-- Color Options Datalist -->
-    <datalist id="color-options">
-        <option value="#ffffff">MTN 94 - R 9010 White</option>
-        <option value="#000000">MTN 94 - R 9011 Black</option>
-        <option value="#402009">MTN 94 - RV 100 Coffee Brown</option>
-        <option value="#2f1109">MTN 94 - RV 101 Ebony Brown</option>
-        <option value="#f3ef36">MTN 94 - RV 1013 Bone White</option>
-        <option value="#ede672">MTN 94 - RV 1016 Lemon Yellow</option>
-        <option value="#ffac73">MTN 94 - RV 1017 Peach</option>
-        <option value="#ffdda3">MTN 94 - RV 102 Dark Orange</option>
-        <option value="#ffe100">MTN 94 - RV 1021 Light Yellow</option>
-        <option value="#ffd58b">MTN 94 - RV 1028 Medium Yellow</option>
-    </datalist>
-
     <div class="controls">
         <div class="control-group">
             <label>Background:</label>
-            <input type="color" id="background-color" list="color-options">
+            <select id="background-color">
+                <option value="#ffffff">
+                    <div class="color-option">
+                        <span class="color-swatch" style="background: #ffffff;"></span>
+                        MTN 94 - R 9010 White
+                    </div>
+                </option>
+                <option value="#000000">
+                    <div class="color-option">
+                        <span class="color-swatch" style="background: #000000;"></span>
+                        MTN 94 - R 9011 Black
+                    </div>
+                </option>
+                <!-- Add all other colors following the same pattern -->
+            </select>
         </div>
         <div class="control-group">
             <label>Outline:</label>
-            <input type="color" id="outline-color" list="color-options">
+            <select id="outline-color">
+                <!-- Same options as above -->
+            </select>
         </div>
         <div class="control-group">
             <label>Fill:</label>
-            <input type="color" id="fill-color" list="color-options">
+            <select id="fill-color">
+                <!-- Same options as above -->
+            </select>
         </div>
     </div>
 
@@ -85,6 +100,35 @@
     </div>
 
     <script>
+        // Function to create color options
+        function createColorOptions() {
+            const colors = [
+                { value: '#ffffff', name: 'MTN 94 - R 9010 White' },
+                { value: '#000000', name: 'MTN 94 - R 9011 Black' },
+                { value: '#402009', name: 'MTN 94 - RV 100 Coffee Brown' },
+                { value: '#2f1109', name: 'MTN 94 - RV 101 Ebony Brown' },
+                { value: '#f3ef36', name: 'MTN 94 - RV 1013 Bone White' },
+                { value: '#ede672', name: 'MTN 94 - RV 1016 Lemon Yellow' },
+                { value: '#ffac73', name: 'MTN 94 - RV 1017 Peach' },
+                { value: '#ffdda3', name: 'MTN 94 - RV 102 Dark Orange' },
+                { value: '#ffe100', name: 'MTN 94 - RV 1021 Light Yellow' },
+                { value: '#ffd58b', name: 'MTN 94 - RV 1028 Medium Yellow' }
+            ];
+
+            const selects = ['background-color', 'outline-color', 'fill-color'];
+            selects.forEach(selectId => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = colors.map(color => `
+                    <option value="${color.value}">
+                        ${color.name}
+                    </option>
+                `).join('');
+            });
+        }
+
+        // Initialize color options
+        createColorOptions();
+
         // Get elements
         const container = document.getElementById('svg-container');
         const outlineSvg = document.getElementById('outline-svg');
