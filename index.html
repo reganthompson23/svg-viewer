@@ -5,59 +5,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SVG Layer Viewer</title>
     <style>
-        body {
-            margin: 0;
-            padding: 20px;
-            font-family: system-ui, -apple-system, sans-serif;
-        }
-        .controls {
-            margin-bottom: 20px;
-        }
-        .control-group {
-            margin: 10px 0;
-            display: flex;
-            align-items: center;
-        }
-        .control-group label {
-            width: 100px;
-        }
-        select {
-            padding: 5px;
-            width: 250px; /* Made wider to accommodate color names */
-        }
-        /* Style for color swatches in dropdown */
-        .color-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .color-swatch {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-        }
-        .svg-container {
-            position: relative;
-            width: 100%;
-            max-width: 1200px;
-            aspect-ratio: 1199.5/475.9;
-        }
-        svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
+    /* Base styles */
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
 
-        select option {
-            padding: 5px 5px 5px 25px;
-            min-height: 20px;
-        }
-        
-    </style>
+    /* Control section styles */
+    .controls {
+        margin-bottom: 20px;
+    }
+
+    .control-group {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+    }
+
+    .control-group label {
+        width: 100px;
+    }
+
+    /* Select styles */
+    select {
+        padding: 5px;
+        width: 250px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: white;
+    }
+
+    select option {
+        padding: 8px 8px 8px 35px;
+        position: relative;
+        background-repeat: no-repeat;
+        background-position: 8px center;
+        background-size: 20px 20px;
+    }
+
+    /* Color swatch styles */
+    .color-option {
+        display: flex;
+        align-items: center;
+        padding: 5px;
+    }
+
+    .color-swatch {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        margin-right: 10px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* SVG container styles */
+    .svg-container {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        aspect-ratio: 1199.5/475.9;
+    }
+
+    svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+</style>
 </head>
 <body>
     <div class="controls">
@@ -106,69 +125,89 @@
     </div>
 
     <script>
-        // Function to create color options
-        function createColorOptions() {
-            const colors = [
-                { value: '#ffffff', name: 'MTN 94 - R 9010 White' },
-                { value: '#000000', name: 'MTN 94 - R 9011 Black' },
-                { value: '#402009', name: 'MTN 94 - RV 100 Coffee Brown' },
-                { value: '#2f1109', name: 'MTN 94 - RV 101 Ebony Brown' },
-                { value: '#f3ef36', name: 'MTN 94 - RV 1013 Bone White' },
-                { value: '#ede672', name: 'MTN 94 - RV 1016 Lemon Yellow' },
-                { value: '#ffac73', name: 'MTN 94 - RV 1017 Peach' },
-                { value: '#ffdda3', name: 'MTN 94 - RV 102 Dark Orange' },
-                { value: '#ffe100', name: 'MTN 94 - RV 1021 Light Yellow' },
-                { value: '#ffd58b', name: 'MTN 94 - RV 1028 Medium Yellow' }
-            ];
+   // Color definitions
+   const colors = [
+       { value: '#ffffff', name: 'MTN 94 - R 9010 White' },
+       { value: '#000000', name: 'MTN 94 - R 9011 Black' },
+       { value: '#402009', name: 'MTN 94 - RV 100 Coffee Brown' },
+       { value: '#2f1109', name: 'MTN 94 - RV 101 Ebony Brown' },
+       { value: '#f3ef36', name: 'MTN 94 - RV 1013 Bone White' },
+       { value: '#ede672', name: 'MTN 94 - RV 1016 Lemon Yellow' },
+       { value: '#ffac73', name: 'MTN 94 - RV 1017 Peach' },
+       { value: '#ffdda3', name: 'MTN 94 - RV 102 Dark Orange' },
+       { value: '#ffe100', name: 'MTN 94 - RV 1021 Light Yellow' },
+       { value: '#ffd58b', name: 'MTN 94 - RV 1028 Medium Yellow' }
+   ];
 
-            const selects = ['background-color', 'outline-color', 'fill-color'];
-            selects.forEach(selectId => {
-                const select = document.getElementById(selectId);
-                select.innerHTML = colors.map(color => `
-                    <option value="${color.value}" style="background-image: linear-gradient(to right, ${color.value} 20px, transparent 20px); padding-left: 25px;">
-                        ${color.name}
-                    </option>
-                `).join('');
-            });
-        }
+   // Function to create color options with swatches
+   function createColorOptions() {
+       const selects = ['background-color', 'outline-color', 'fill-color'];
+       
+       selects.forEach(selectId => {
+           const select = document.getElementById(selectId);
+           select.innerHTML = '';  // Clear existing options
+           
+           colors.forEach(color => {
+               const option = document.createElement('option');
+               const colorSwatch = document.createElement('span');
+               const wrapper = document.createElement('div');
+               
+               // Set up the color swatch
+               colorSwatch.className = 'color-swatch';
+               colorSwatch.style.backgroundColor = color.value;
+               
+               // Set up the wrapper
+               wrapper.className = 'color-option';
+               wrapper.appendChild(colorSwatch);
+               wrapper.appendChild(document.createTextNode(color.name));
+               
+               // Set up the option
+               option.value = color.value;
+               option.textContent = color.name;
+               option.dataset.color = color.value;
+               
+               select.appendChild(option);
+           });
+       });
+   }
 
-        // Initialize color options
-        createColorOptions();
+   // Initialize elements
+   const container = document.getElementById('svg-container');
+   const outlineSvg = document.getElementById('outline-svg');
+   const fillSvg = document.getElementById('fill-svg');
 
-        // Get elements
-        const container = document.getElementById('svg-container');
-        const outlineSvg = document.getElementById('outline-svg');
-        const fillSvg = document.getElementById('fill-svg');
+   // Create color options
+   createColorOptions();
 
-        // Add event listeners to color selectors
-        document.getElementById('background-color').addEventListener('change', (e) => {
-            container.style.backgroundColor = e.target.value;
-        });
+   // Event listeners for color changes
+   document.getElementById('background-color').addEventListener('change', (e) => {
+       container.style.backgroundColor = e.target.value;
+   });
 
-        document.getElementById('outline-color').addEventListener('change', (e) => {
-            const paths = outlineSvg.getElementsByTagName('path');
-            for(let path of paths) {
-                path.style.fill = e.target.value;
-            }
-        });
+   document.getElementById('outline-color').addEventListener('change', (e) => {
+       const paths = outlineSvg.getElementsByTagName('path');
+       Array.from(paths).forEach(path => {
+           path.style.fill = e.target.value;
+       });
+   });
 
-        document.getElementById('fill-color').addEventListener('change', (e) => {
-            const paths = fillSvg.getElementsByTagName('path');
-            for(let path of paths) {
-                path.style.fill = e.target.value;
-            }
-        });
+   document.getElementById('fill-color').addEventListener('change', (e) => {
+       const paths = fillSvg.getElementsByTagName('path');
+       Array.from(paths).forEach(path => {
+           path.style.fill = e.target.value;
+       });
+   });
 
-        // Set initial colors
-        container.style.backgroundColor = document.getElementById('background-color').value;
-        const outlinePaths = outlineSvg.getElementsByTagName('path');
-        for(let path of outlinePaths) {
-            path.style.fill = document.getElementById('outline-color').value;
-        }
-        const fillPaths = fillSvg.getElementsByTagName('path');
-        for(let path of fillPaths) {
-            path.style.fill = document.getElementById('fill-color').value;
-        }
-    </script>
+   // Set initial colors
+   container.style.backgroundColor = document.getElementById('background-color').value;
+   
+   Array.from(outlineSvg.getElementsByTagName('path')).forEach(path => {
+       path.style.fill = document.getElementById('outline-color').value;
+   });
+   
+   Array.from(fillSvg.getElementsByTagName('path')).forEach(path => {
+       path.style.fill = document.getElementById('fill-color').value;
+   });
+</script>
 </body>
 </html>
