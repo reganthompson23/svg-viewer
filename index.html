@@ -51,6 +51,12 @@
             width: 100%;
             height: 100%;
         }
+
+        select option {
+            padding: 5px 5px 5px 25px;
+            min-height: 20px;
+        }
+        
     </style>
 </head>
 <body>
@@ -119,7 +125,7 @@
             selects.forEach(selectId => {
                 const select = document.getElementById(selectId);
                 select.innerHTML = colors.map(color => `
-                    <option value="${color.value}">
+                    <option value="${color.value}" style="background-image: linear-gradient(to right, ${color.value} 20px, transparent 20px); padding-left: 25px;">
                         ${color.name}
                     </option>
                 `).join('');
