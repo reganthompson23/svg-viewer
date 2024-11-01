@@ -489,36 +489,84 @@ svg {
         }
 
         // Initialize selects
-        const backgroundSelect = new CustomSelect('background-select', (value) => {
-            document.getElementById('svg-container').style.backgroundColor = value;
-        });
+const backgroundSelect = new CustomSelect('background-select', (value) => {
+    document.getElementById('svg-container').style.backgroundColor = value;
+});
 
-        const outlineSelect = new CustomSelect('outline-select', (value) => {
-            const paths = document.getElementById('outline-svg').getElementsByTagName('path');
-            Array.from(paths).forEach(path => {
-                path.style.fill = value;
-            });
-        });
+const secondaryBackgroundSelect = new CustomSelect('secondary-background-select', (value) => {
+    const paths = document.getElementById('secondary-background-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
 
-        const fillSelect = new CustomSelect('fill-select', (value) => {
-            const paths = document.getElementById('fill-svg').getElementsByTagName('path');
-            Array.from(paths).forEach(path => {
-                path.style.fill = value;
-            });
-        });
+const fillSelect = new CustomSelect('fill-select', (value) => {
+    const paths = document.getElementById('fill-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
 
-        // Set initial colors
-        document.getElementById('svg-container').style.backgroundColor = backgroundSelect.value;
-        
-        const outlinePaths = document.getElementById('outline-svg').getElementsByTagName('path');
-        Array.from(outlinePaths).forEach(path => {
-            path.style.fill = outlineSelect.value;
-        });
-        
-        const fillPaths = document.getElementById('fill-svg').getElementsByTagName('path');
-        Array.from(fillPaths).forEach(path => {
-            path.style.fill = fillSelect.value;
-        });
+const secondaryFillSelect = new CustomSelect('secondary-fill-select', (value) => {
+    const paths = document.getElementById('secondary-fill-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+const outlineSelect = new CustomSelect('outline-select', (value) => {
+    const paths = document.getElementById('outline-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+const shadowSelect = new CustomSelect('shadow-select', (value) => {
+    const paths = document.getElementById('shadow-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+const shadowFillSelect = new CustomSelect('shadow-fill-select', (value) => {
+    const paths = document.getElementById('shadow-fill-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+const highlightSelect = new CustomSelect('highlight-select', (value) => {
+    const paths = document.getElementById('highlight-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+const keylineSelect = new CustomSelect('keyline-select', (value) => {
+    const paths = document.getElementById('keyline-svg').getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = value;
+    });
+});
+
+// Set initial colors
+document.getElementById('svg-container').style.backgroundColor = backgroundSelect.value;
+
+[
+    { id: 'secondary-background-svg', select: secondaryBackgroundSelect },
+    { id: 'fill-svg', select: fillSelect },
+    { id: 'secondary-fill-svg', select: secondaryFillSelect },
+    { id: 'outline-svg', select: outlineSelect },
+    { id: 'shadow-svg', select: shadowSelect },
+    { id: 'shadow-fill-svg', select: shadowFillSelect },
+    { id: 'highlight-svg', select: highlightSelect },
+    { id: 'keyline-svg', select: keylineSelect }
+].forEach(({ id, select }) => {
+    const paths = document.getElementById(id).getElementsByTagName('path');
+    Array.from(paths).forEach(path => {
+        path.style.fill = select.value;
+    });
+});
     </script>
 </body>
 </html>
